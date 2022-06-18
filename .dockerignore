@@ -1,0 +1,9 @@
+.env
+.git
+.gitignore
+.prettierrc.json
+docker-compose.yml
+Dockerfile
+panda.jpg
+send-mail.js
+.vscode

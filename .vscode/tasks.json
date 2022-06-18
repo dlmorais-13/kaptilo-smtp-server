@@ -1,0 +1,41 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "serve",
+			"problemMatcher": [],
+			"label": "Start dev server",
+			"group": {
+				"kind": "build",
+			},
+			"presentation": {
+				"group": "dev"
+			}
+		},
+		{
+			"type": "shell",
+			"command": "docker run --rm -ti --name smtp-redis -p 6379:6379 redis:6.2-alpine",
+			"problemMatcher": [],
+			"label": "Start Redis",
+			"group": {
+				"kind": "build",
+			},
+			"presentation": {
+				"group": "dev"
+			}
+		},
+		{
+			"type": "shell",
+			"command": "docker run --rm -ti --name openldap --env LDAP_ADMIN_USERNAME=admin --env LDAP_ADMIN_PASSWORD=admin --env LDAP_USERS=user01,user02 --env LDAP_PASSWORDS=pass01,pass02 -p 6389:1389 -p 6636:1636 bitnami/openldap",
+			"problemMatcher": [],
+			"label": "Start OpenLDAP",
+			"group": {
+				"kind": "build",
+			},
+			"presentation": {
+				"group": "dev"
+			}
+		}
+	]
+}

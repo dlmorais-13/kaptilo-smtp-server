@@ -1,0 +1,36 @@
+version: "3"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+      - "5025:5025"
+    depends_on:
+      - redis
+      - ldap
+    environment:
+      HTTP_PORT: 8080
+      SMTP_AUTH_MODE: ldap
+      SMTP_PORT: 5025
+      SMTP_logger: "false"
+      SMTP_allowInsecureAuth: "true"
+      LDAP_HOST: ldap
+      LDAP_PORT: 1389
+      LDAP_BIND_DN: cn=admin,dc=example,dc=org
+      LDAP_BIND_PASSWORD: admin
+      LDAP_SEARCH_BASE: dc=example,dc=org
+      REDIS: "true"
+      REDIS_URL: redis://redis:6379
+    
+  redis:
+    image: redis:6.2-alpine
+
+  ldap:
+    image: bitnami/openldap
+    environment:
+      LDAP_ADMIN_USERNAME: admin
+      LDAP_ADMIN_PASSWORD: admin
+      LDAP_USERS: user01,user02
+      LDAP_PASSWORDS: pass01,pass02
