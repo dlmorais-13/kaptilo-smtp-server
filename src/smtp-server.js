@@ -1,6 +1,7 @@
 const SMTPServer = require('smtp-server').SMTPServer;
 const simpleParser = require('mailparser').simpleParser;
 const LdapClient = require('./ldap-client');
+const camelCase = require('lodash.camelcase');
 
 /**
  * SMTP Server class.
@@ -17,7 +18,7 @@ const LdapClient = require('./ldap-client');
  * using the environment variable SMTP_AUTH_MODE.
  *
  * Aditional configuration:
- * - SMTP_HOST: Host to be used when listening (default: 0.0.0.0)
+ * - SMTP_IP: Host to be used when listening (default: 0.0.0.0)
  * - SMTP_PORT: Port to be listened (default: 5025)
  */
 module.exports = class SMTP {
@@ -26,12 +27,14 @@ module.exports = class SMTP {
   constructor() {
     // Build options for smtp-server.
     const options = Object.keys(process.env)
-      .filter((k) => k.startsWith('SMTP_'))
+      .filter((k) => k.startsWith('SMTP_OPT_'))
       .reduce((acc, k) => {
         let value = process.env[k];
         if (value === 'true') value = true;
         if (value === 'false') value = false;
-        acc[k.replace(/^SMTP_/, '')] = value;
+        const smtpOptionName = camelCase(k.replace(/^SMTP_OPT_/, ''));
+        console.log(`Using SMTP option "${smtpOptionName}" with value "${value}"`);
+        acc[smtpOptionName] = value;
         return acc;
       }, {});
 
@@ -67,7 +70,7 @@ module.exports = class SMTP {
     if (this.storage.connect) await this.storage.connect();
 
     const port = process.env.SMTP_PORT || 5025;
-    const host = process.env.SMTP_HOST || '0.0.0.0';
+    const host = process.env.SMTP_IP || '0.0.0.0';
     this.server.listen(port, host, () => {
       console.log(`SMTP Server listening on ${host}:${port}`);
     });

@@ -4,11 +4,11 @@ const { createClient } = require('redis');
  * Class for the RedisStorage.
  *
  * By default, connects to a Redis instance running on localhost:6379.
- * It is possible to change the connection URL using the environment variable REDIS_URL.
+ * It is possible to change the connection URL using the environment variable REDIS_CONN_STRING.
  */
 module.exports = class RedisStorage {
   constructor() {
-    const redisUrl = process.env.REDIS_URL || 'redis://localhost:6379';
+    const redisUrl = process.env.REDIS_CONN_STRING || 'redis://localhost:6379';
     this.redisClient = createClient({ url: redisUrl });
     this.redisClient.on('error', console.log);
     this.maxItems = process.env.MAX_ITEMS || 0;

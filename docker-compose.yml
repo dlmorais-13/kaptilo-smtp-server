@@ -22,7 +22,7 @@ services:
       LDAP_BIND_PASSWORD: admin
       LDAP_SEARCH_BASE: dc=example,dc=org
       REDIS: "true"
-      REDIS_URL: redis://redis:6379
+      REDIS_CONN_STRING: redis://redis:6379
     
   redis:
     image: redis:6.2-alpine

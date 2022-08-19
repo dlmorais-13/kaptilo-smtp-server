@@ -67,12 +67,13 @@ module.exports = class LdapClient {
    */
   async auth(username, password) {
     try {
+      const uidAttr = process.env.LDAP_USER_ID_ATTR || 'uid';
       const search = await promisify(this.client.search.bind(this.client))(
         process.env.LDAP_SEARCH_BASE,
         {
           scope: process.env.LDAP_SEARCH_SCOPE || 'sub',
-          attributes: ['dn', 'uid'],
-          filter: `uid=${username}`,
+          attributes: ['dn', uidAttr],
+          filter: `${uidAttr}=${username}`,
         }
       );
   
